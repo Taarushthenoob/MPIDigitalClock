@@ -1,0 +1,1792 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+ProteusDesignCode.bin -- emu8086 assembler version: 4.08  
+ 
+[ 19-04-2021  --  15:32:59 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       #make_bin#
+[   2]        :                                       
+[   3]        :                                       ; BIN is plain binary format similar to .com format, but not limited to 1 segment;
+[   4]        :                                       ; All values between # are directives, these values are saved into a separate .binf file.
+[   5]        :                                       ; Before loading .bin file emulator reads .binf file with the same file name.
+[   6]        :                                       
+[   7]        :                                       ; All directives are optional, if you don't need them, delete them.
+[   8]        :                                       
+[   9]        :                                       ; set loading address, .bin file will be loaded to this address:
+[  10]        :                                       #LOAD_SEGMENT=0000h#
+[  11]        :                                       #LOAD_OFFSET=0000h#
+[  12]        :                                       
+[  13]        :                                       ; set entry point:
+[  14]        :                                       #CS=0000h#	; same as loading segment
+[  15]        :                                       #IP=0000h#	; same as loading offset
+[  16]        :                                       
+[  17]        :                                       ; set segment registers
+[  18]        :                                       #DS=0000h#	; same as loading segment
+[  19]        :                                       #ES=0000h#	; same as loading segment
+[  20]        :                                       
+[  21]        :                                       ; set stack
+[  22]        :                                       #SS=0000h#	; same as loading segment
+[  23]        :                                       #SP=FFFEh#	; set to top of loading segment
+[  24]        :                                       
+[  25]        :                                       ; set general registers (optional)
+[  26]        :                                       #AX=0000h#
+[  27]        :                                       #BX=0000h#
+[  28]        :                                       #CX=0000h#
+[  29]        :                                       #DX=0000h#
+[  30]        :                                       #SI=0000h#
+[  31]        :                                       #DI=0000h#
+[  32]        :                                       #BP=0000h#
+[  33]        :                                       
+[  34]        :                                       	;jump to the start of the code - reset address is kept at 0000:0000
+[  35]        :                                       ;as this is only a limited simulation
+[  36]    0000: E9 FD 03                              jmp     st1
+[  37]        :                                       ;jmp st1 - takes 3 bytes followed by nop that is 4 bytes
+[  38]    0003: 00 00 00 00 00                        db 5 dup(0)
+[  39]        :                                       ;int 1 is not used so 1 x4 = 00004h - it is stored with 0
+[  40]        :                                       ;eoc - is used as nmi - ip value points to ad_isr and cs value will
+[  41]        :                                       ;remain at 0000
+[  42]    0008: 19 05                                 dw     start1
+[  43]    000A: 00 00                                 dw      0000
+[  44]        :                                       ;int 3 to int 255 unused so ip and cs intialized to 0000
+[  45]        :                                       ;from 3x4 = 0000cH		
+[  46]    000C: 00 00 00 00 00 00 00 00 00 00 00 00   		 db     1012 dup(0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00                         
+[  47]        :                                       
+[  48]    0400: FA                                    st1:    cli 					; clear interrupt flag, because we won't be using maskable innterrupts
+[  49]        :                                       
+[  50]    0401: B8 00 02                              mov       ax,200h		; intialize ds, es,ss to start of RAM
+[  51]    0404: 8E D8                                 mov       ds,ax
+[  52]    0406: 8E C0                                 mov       es,ax
+[  53]    0408: 8E D0                                 mov       ss,ax
+[  54]    040A: BC FE 0F                              mov       sp,0FFEH
+[  55]        :                                       		
+[  56]        :                                       								
+[  57]        :                                       	port1a equ 00h				
+[  58]        :                                       	port1b equ 02h; ports for 8255A
+[  59]        :                                       	port1c equ 04h
+[  60]        :                                       	creg1 equ 06h
+[  61]        :                                       
+[  62]        :                                       	port2a equ 10h				
+[  63]        :                                       	port2b equ 12h
+[  64]        :                                       	port2c equ 14h; ports for 8255B
+[  65]        :                                       	creg2 equ 16h
+[  66]        :                                       	
+[  67]        :                                       						
+[  68]        :                                       	counter_0 equ 08h
+[  69]        :                                       	counter_1 equ 0Ah			
+[  70]        :                                       	creg equ 0Eh;ports for 8254 timer
+[  71]        :                                       	
+[  72]        :                                       	
+[  73]    040D: B0 80                                 	mov al,80h 			
+[  74]    040F: E6 16                                 	out creg2,al;setting all ports of 8255B for mode 0 output
+[  75]        :                                       	
+[  76]    0411: B0 9B                                 	mov al,9Bh 			
+[  77]    0413: E6 06                                 	out creg1,al;seting all ports of 8255A for mode 0 input
+[  78]        :                                       	
+[  79]        :                                       	; To run the clock, we need interrupts at an interval of 1 sec (so as to update the value of second).
+[  80]        :                                       	; 8254 is running on 10kHz clock => We must divide by (100)d or (0064)h in order to get a out frequency of 100Hz which is the clock input for counter1
+[  81]        :                                       	; to which we give a count of (100)d or (0064)h square wave of 0.5 sec up and 0.5 down
+[  82]        :                                       	; Note that we are using mode 3, i.e. square wave generation mode
+[  83]        :                                       	
+[  84]    0415: B0 36                                 		  mov       al,36h	
+[  85]    0417: E6 0E                                 		  out       creg,al
+[  86]    0419: B0 76                                 		  mov       al,76h
+[  87]    041B: E6 0E                                 		  out       creg,al
+[  88]    041D: B0 64                                 		  mov       al,64h
+[  89]    041F: E6 08                                 		  out       counter_0,al
+[  90]    0421: B0 00                                 		  mov       al,00h
+[  91]    0423: E6 08                                 		  out       counter_0,al
+[  92]    0425: B0 64                                 		  mov       al,64h
+[  93]    0427: E6 0A                                 		  out       counter_1,al
+[  94]    0429: B0 00                                 		  mov       al,00h
+[  95]    042B: E6 0A                                 		  out       counter_1,al
+[  96]        :                                       	
+[  97]        :                                       	
+[  98]        :                                       
+[  99]        :                                       	;initialisation of lcd
+[ 100]        :                                       
+[ 101]    042D: B0 38                                 		MOV AL, 38H 			;initialize LCD for 2 lines & 5*7 matrix
+[ 102]    042F: E6 12                                 		out port2b,al
+[ 103]    0431: B0 01                                 		mov al,01h  			;clearscreen
+[ 104]    0433: E6 14                                 		out port2c,al
+[ 105]    0435: B0 00                                 		MOV AL, 00000000B 		;RS=0,R/W=0,E=0 for H-To-L pulse
+[ 106]    0437: E6 14                                 		out port2c,al
+[ 107]    0439: E8 51 01                              		call delay_20ms
+[ 108]        :                                       		
+[ 109]    043C: B0 0E                                 		MOV AL, 0EH 			;LCD on, cursor on and no blink character
+[ 110]    043E: E6 12                                 		out port2b,al
+[ 111]    0440: B0 01                                 		mov al,01h
+[ 112]    0442: E6 14                                 		out port2c,al
+[ 113]    0444: B0 00                                 		mov al,00h
+[ 114]    0446: E6 14                                 		out port2c,al
+[ 115]    0448: E8 42 01                              		call delay_20ms
+[ 116]        :                                       		
+[ 117]    044B: B0 06                                 		MOV AL, 06  			;command for shifting cursor right
+[ 118]    044D: E6 12                                 		out port2b,al
+[ 119]    044F: B0 01                                 		mov al,01h
+[ 120]    0451: E6 14                                 		out port2c,al
+[ 121]    0453: B0 00                                 		mov al,00h
+[ 122]    0455: E6 14                                 		out port2c,al
+[ 123]    0457: E8 33 01                              		call delay_20ms
+[ 124]        :                                       	;initialisation end
+[ 125]        :                                       				
+[ 126]        :                                       		; Setting the default values
+[ 127]        :                                       		
+[ 128]    045A: C6 06 52 0F 00                        		mov second,0
+[ 129]    045F: C6 06 53 0F 00                        		mov min,0
+[ 130]    0464: C6 06 54 0F 0D                        		mov hour,13
+[ 131]    0469: C6 06 5B 0F 01                        		mov hour_12,1
+[ 132]    046E: C6 06 5A 0F 00                        		mov format_check,0
+[ 133]    0473: C6 06 5C 0F 01                        		mov phase,1				; Initiazed time to 1:00:00 pm
+[ 134]        :                                       		
+[ 135]    0478: C6 06 55 0F 01                        		mov day,1
+[ 136]    047D: C6 06 56 0F 01                        		mov month,1
+[ 137]    0482: C6 06 57 0F 15                        		mov year,21				; setting date to 1/1/2021
+[ 138]        :                                       		
+[ 139]    0487: C6 06 4D 0F 3C                        		mov count_sec,60
+[ 140]    048C: C6 06 4E 0F 3C                        		mov count_min,60
+[ 141]    0491: C6 06 4F 0F 18                        		mov count_hour,24
+[ 142]    0496: C6 06 50 0F 1E                        		mov count_day,30
+[ 143]    049B: C6 06 51 0F 0C                        		mov count_month,12		; the total number of seconds in a min, minutes in an hour, etc.
+[ 144]        :                                       				
+[ 145]        :                                       		
+[ 146]        :                                       										
+[ 147]    04A0: C6 06 5D 0F 0D                        		mov alarm_hour,13
+[ 148]    04A5: C6 06 5E 0F 01                        		mov alarm_hour_12,1
+[ 149]    04AA: C6 06 5F 0F 02                        		mov alarm_min,2
+[ 150]    04AF: C6 06 60 0F 01                        		mov alarm_phase,1		; setting alarm for 1:02 pm
+[ 151]        :                                       		
+[ 152]        :                                       		
+[ 153]        :                                       		; the main program
+[ 154]    04B4:                                       polling:
+[ 155]    04B4: FA                                    cli
+[ 156]    04B5: E4 04                                 		in al,port1c
+[ 157]    04B7: 3C 00                                 		cmp al,00
+[ 158]    04B9: 75 16                                 		jne p2				; Jump if the thumbswitch isn't in lock position
+[ 159]    04BB: E8 CF 00                              		call delay_20ms		; Delay code execution by 20ms
+[ 160]    04BE: E4 04                                 		in al,port1c		
+[ 161]    04C0: 3C 00                                 		cmp al,00
+[ 162]    04C2: 75 0D                                 		jne p2				;Again checking the same because of thumbswitch debounce property
+[ 163]    04C4: E4 00                                 		in al,port1a
+[ 164]    04C6: 24 10                                 		and al,10h 			
+[ 165]    04C8: 3C 10                                 		cmp al,10h			;Checking whether the alarm is on/ off
+[ 166]    04CA: 75 03                                 		jne p1				;Keep polling
+[ 167]    04CC: E8 05 08                              		call buzzer			;Buzzer is called
+[ 168]    04CF: EB E3                                 p1:		jmp polling			;If alarm is not set and switch is in LOCK position => Keep polling
+[ 169]    04D1: E4 04                                 p2:		in al,port1c
+[ 170]    04D3: 8A D8                                 		mov bl,al
+[ 171]    04D5: E8 B5 00                              		call delay_20ms
+[ 172]    04D8: E4 04                                 		in al,port1c
+[ 173]    04DA: 3A C3                                 		cmp al,bl				; if the two values are diff, keep polling
+[ 174]    04DC: 75 D6                                 		jne polling			
+[ 175]    04DE: C3                                    		ret							
+[ 176]        :                                       							
+[ 177]        :                                       		
+[ 178]        :                                       		
+[ 179]        :                                       
+[ 180]    04DF: 3C 80                                 mn0:	cmp al,80h			;Set Hour
+[ 181]    04E1: 75 03                                 		jne mn1		
+[ 182]    04E3: E8 6A 03                              		call set_hour
+[ 183]    04E6: 3C 40                                 mn1:	cmp al,40h 			;Set Minute
+[ 184]    04E8: 75 03                                 		jne mn2
+[ 185]    04EA: E8 A1 04                              		call set_minute
+[ 186]    04ED: 3C 20                                 mn2:	cmp al,20h 			;Set Second
+[ 187]    04EF: 75 03                                 		jne mn3
+[ 188]    04F1: E8 88 05                              		call set_second
+[ 189]    04F4: 3C 10                                 mn3:	cmp al,10h 			;Set Date
+[ 190]    04F6: 75 03                                 		jne mn4
+[ 191]    04F8: E8 09 05                              		call set_date
+[ 192]    04FB: 3C 08                                 mn4:	cmp al,08h 			;Set Month
+[ 193]    04FD: 75 03                                 		jne mn5
+[ 194]    04FF: E8 17 04                              		call set_month
+[ 195]    0502: 3C 04                                 mn5:	cmp al,04h 			;Set Year
+[ 196]    0504: 75 03                                 		jne mn6
+[ 197]    0506: E8 E9 05                              		call set_year
+[ 198]    0509: 3C 02                                 mn6:	cmp al,02h 			;Set Alarm Hour
+[ 199]    050B: 75 03                                 		jne mn7
+[ 200]    050D: E8 5A 06                              		call set_alarm_hour
+[ 201]    0510: 3C 01                                 mn7:	cmp al,01h			;Set Alarm Min
+[ 202]    0512: 75 03                                 		jne mn8
+[ 203]    0514: E8 39 07                              		call set_alarm_min
+[ 204]    0517: EB 9B                                 mn8:		jmp polling     ; After one of them has been done, we need to repeat the polling process
+[ 205]        :                                       
+[ 206]        :                                       ;end of main program.
+[ 207]        :                                       
+[ 208]        :                                       	
+[ 209]        :                                       	; ISR associated with NMI(from 8254) compares seconds, minutes, etc increments them if necessary
+[ 210]        :                                       	;if second reaches 60, reset it to 0 and increment minute and so on for hour, day, month and year
+[ 211]    0519:                                       start1:
+[ 212]        :                                       
+[ 213]    0519: A0 52 0F                              	mov al,second					;inc second
+[ 214]    051C: FE C0                                 	inc al
+[ 215]    051E: A2 52 0F                              	mov second,al
+[ 216]    0521: 3A 06 4D 0F                           	cmp al,count_sec				; check if the seconds have reached 60
+[ 217]    0525: 75 62                                 	jne y1							
+[ 218]        :                                       	
+[ 219]    0527: C6 06 52 0F 00                        	mov second,00					
+[ 220]    052C: A0 53 0F                              	mov al,min						
+[ 221]    052F: FE C0                                 	inc al
+[ 222]    0531: A2 53 0F                              	mov min,al
+[ 223]    0534: A0 53 0F                              	mov al,min
+[ 224]    0537: 3A 06 4E 0F                           	cmp al,count_min
+[ 225]    053B: 75 4C                                 	jne y1							
+[ 226]        :                                       
+[ 227]    053D: C6 06 53 0F 00                        	mov min,00						; Increment hour if minutes reached 60
+[ 228]    0542: A0 54 0F                              	mov al,hour
+[ 229]    0545: FE C0                                 	inc al
+[ 230]    0547: A2 54 0F                              	mov hour,al
+[ 231]    054A: 3A 06 4F 0F                           	cmp al,count_hour
+[ 232]    054E: 75 39                                 	jne y1							
+[ 233]        :                                       
+[ 234]    0550: C6 06 54 0F 00                        	mov hour,00						
+[ 235]    0555: A0 55 0F                              	mov al,day
+[ 236]    0558: FE C0                                 	inc al
+[ 237]    055A: A2 55 0F                              	mov day,al
+[ 238]    055D: A0 55 0F                              	mov al,day					
+[ 239]    0560: 3A 06 50 0F                           	cmp al,count_day				
+[ 240]    0564: 75 23                                 	jne y1							
+[ 241]        :                                       
+[ 242]    0566: C6 06 55 0F 01                        	mov day,1						
+[ 243]    056B: A0 56 0F                              	mov al,month			
+[ 244]    056E: FE C0                                 	inc al
+[ 245]    0570: A2 56 0F                              	mov month,al
+[ 246]    0573: A0 56 0F                              	mov al,month
+[ 247]    0576: 3A 06 51 0F                           	cmp al,count_month				; compare month with 12
+[ 248]    057A: 75 0D                                 	jne y1							
+[ 249]        :                                       
+[ 250]    057C: C6 06 56 0F 01                        	mov month,1						;increment year
+[ 251]    0581: A0 57 0F                              	mov al,year
+[ 252]    0584: FE C0                                 	inc al
+[ 253]    0586: A2 57 0F                              	mov year,al
+[ 254]    0589: E8 0A 00                              y1:	call display
+[ 255]    058C: CF                                    	iret
+[ 256]        :                                       
+[ 257]        :                                       ; end of ISR associated with NMI (int 2h)
+[ 258]        :                                       	
+[ 259]        :                                       
+[ 260]    058D:                                       delay_20ms proc near
+[ 261]    058D: 51                                    				push 	cx
+[ 262]    058E: B9 84 03                              				mov 	cx,900d
+[ 263]        :                                       				
+[ 264]    0591: 90                                    dl1:			nop							
+[ 265]    0592: E2 FD                                 				loop 	dl1					
+[ 266]        :                                       				
+[ 267]    0594: 59                                    				pop 	cx					
+[ 268]    0595: C3                                    				ret
+[ 269]        :                                       delay_20ms endp
+[ 270]        :                                       
+[ 271]        :                                       
+[ 272]        :                                       
+[ 273]        :                                       ;procedure to display clock
+[ 274]    0596:                                       display proc near		
+[ 275]        :                                       		
+[ 276]        :                                       	;format_check: 1 = 24hr & 0 = 12hr
+[ 277]        :                                       	
+[ 278]        :                                       		
+[ 279]        :                                       		;input format check
+[ 280]    0596: E4 00                                 		in al,port1a
+[ 281]    0598: 24 01                                 		and al,01h
+[ 282]    059A: A2 5A 0F                              		mov format_check,al 		
+[ 283]        :                                       		
+[ 284]        :                                       		;clearing screen
+[ 285]    059D: B0 01                                 		mov al,01h
+[ 286]    059F: E6 12                                 		out port2b,al
+[ 287]    05A1: B0 01                                 		mov al,01h
+[ 288]    05A3: E6 14                                 		out port2c,al
+[ 289]    05A5: B0 00                                 		mov al,00h
+[ 290]    05A7: E6 14                                 		out port2c,al
+[ 291]    05A9: E8 E1 FF                              		call delay_20ms
+[ 292]        :                                       		
+[ 293]        :                                       		
+[ 294]        :                                       		;checking if 24hr or 12hr
+[ 295]    05AC: A0 5A 0F                              		mov al,format_check
+[ 296]    05AF: 3C 01                                 		cmp al,1
+[ 297]    05B1: 75 3F                                 		jne hr12				
+[ 298]        :                                       		
+[ 299]        :                                       		;display the 24 hr format time
+[ 300]        :                                       		
+[ 301]    05B3: B9 00 00                              		mov cx,0	
+[ 302]    05B6: A0 54 0F                              		mov al,hour
+[ 303]        :                                       		
+[ 304]    05B9: 8A D8                                 		mov       bl,al
+[ 305]    05BB: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 306]    05BD: 04 01                                 x1:		add       al,01
+[ 307]    05BF: 27                                    	    daa
+[ 308]    05C0: FE CB                                 	    dec       bl
+[ 309]    05C2: 75 F9                                 	    jnz       x1
+[ 310]        :                                       				
+[ 311]    05C4: A2 58 0F                              mov digit,al			
+[ 312]        :                                       								
+[ 313]    05C7: 24 F0                                 		and al,0f0h				
+[ 314]    05C9: B1 04                                 		mov cl,4
+[ 315]    05CB: D2 C0                                 		rol al,cl
+[ 316]    05CD: 04 30                                 		add al,30h				
+[ 317]        :                                       		
+[ 318]    05CF: E6 12                                 		out port2b,al			
+[ 319]    05D1: B0 11                                 		mov al,11h
+[ 320]    05D3: E6 14                                 		out port2c,al
+[ 321]    05D5: B0 10                                 		mov al,10h
+[ 322]    05D7: E6 14                                 		out port2c,al
+[ 323]    05D9: E8 B1 FF                              		call delay_20ms
+[ 324]        :                                       						
+[ 325]        :                                       						
+[ 326]    05DC: A0 58 0F                              		mov al,digit			
+[ 327]    05DF: 24 0F                                 		and al,0fh
+[ 328]    05E1: 04 30                                 		add al,30h				
+[ 329]        :                                       						
+[ 330]    05E3: E6 12                                 		out port2b,al			
+[ 331]    05E5: B0 11                                 		mov al,11h
+[ 332]    05E7: E6 14                                 		out port2c,al
+[ 333]    05E9: B0 10                                 		mov al,10h
+[ 334]    05EB: E6 14                                 		out port2c,al
+[ 335]    05ED: E8 9D FF                              		call delay_20ms
+[ 336]        :                                       
+[ 337]        :                                       		; displaying time in 24 hour format completed
+[ 338]        :                                       				
+[ 339]    05F0: EB 77                                 		jmp skip
+[ 340]        :                                       		
+[ 341]        :                                       	;	displaying 12 hour format
+[ 342]        :                                       	
+[ 343]    05F2: A0 54 0F                              hr12:mov al,hour
+[ 344]    05F5: 3C 00                                 	cmp al,00					
+[ 345]    05F7: 75 0C                                 	jne a1						
+[ 346]    05F9: C6 06 5B 0F 0C                        	mov hour_12,12
+[ 347]    05FE: C6 06 5C 0F 00                        	mov phase,0
+[ 348]    0603: EB 2A                                 	jmp exit					
+[ 349]        :                                       
+[ 350]    0605: 3C 0C                                 a1:	cmp al,12					;12pm
+[ 351]    0607: 75 0C                                 	jne a2
+[ 352]    0609: C6 06 5B 0F 0C                        	mov hour_12,12
+[ 353]    060E: C6 06 5C 0F 01                        	mov phase,1
+[ 354]    0613: EB 1A                                 	jmp exit
+[ 355]        :                                       
+[ 356]    0615: 3C 0C                                 a2:	cmp al,12					;am
+[ 357]    0617: 77 0A                                 	ja a3
+[ 358]    0619: A2 5B 0F                              	mov hour_12,al
+[ 359]    061C: C6 06 5C 0F 00                        	mov phase,0
+[ 360]    0621: EB 0C                                 	jmp exit
+[ 361]        :                                       
+[ 362]    0623: B3 0C                                 a3:	mov bl,12					;Subtract 12, pm
+[ 363]    0625: 2A C3                                 	sub al,bl
+[ 364]    0627: A2 5B 0F                              	mov hour_12,al	
+[ 365]    062A: C6 06 5C 0F 01                        	mov phase,1
+[ 366]        :                                       	
+[ 367]    062F: A0 5B 0F                              exit:	mov al,hour_12
+[ 368]    0632: 8A D8                                 		mov       bl,al
+[ 369]    0634: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 370]    0636: 04 01                                 x2:		add       al,01
+[ 371]    0638: 27                                    	    daa
+[ 372]    0639: FE CB                                 	    dec       bl
+[ 373]    063B: 75 F9                                 	    jnz       x2
+[ 374]    063D: A2 58 0F                              		mov digit,al			
+[ 375]        :                                       		
+[ 376]    0640: 24 F0                                 		and al,0f0h				
+[ 377]    0642: B1 04                                 		mov cl,4
+[ 378]    0644: D2 C0                                 		rol al,cl
+[ 379]    0646: 04 30                                 		add al,30h
+[ 380]        :                                       		
+[ 381]    0648: E6 12                                 		out port2b,al			
+[ 382]    064A: B0 11                                 		mov al,11h
+[ 383]    064C: E6 14                                 		out port2c,al
+[ 384]    064E: B0 10                                 		mov al,10h
+[ 385]    0650: E6 14                                 		out port2c,al
+[ 386]    0652: E8 38 FF                              		call delay_20ms
+[ 387]        :                                       		
+[ 388]    0655: A0 58 0F                              		mov al,digit			
+[ 389]    0658: 24 0F                                 		and al,0fh
+[ 390]    065A: 04 30                                 		add al,30h
+[ 391]        :                                       		
+[ 392]    065C: E6 12                                 		out port2b,al			
+[ 393]    065E: B0 11                                 		mov al,11h
+[ 394]    0660: E6 14                                 		out port2c,al
+[ 395]    0662: B0 10                                 		mov al,10h
+[ 396]    0664: E6 14                                 		out port2c,al
+[ 397]    0666: E8 24 FF                              		call delay_20ms
+[ 398]        :                                       	;display_hour_12 completed
+[ 399]        :                                       		
+[ 400]        :                                       	;displaying ':'
+[ 401]    0669: B0 3A                                 skip:		mov al,3ah		;Ascii value of ':' is 3a
+[ 402]    066B: E6 12                                 		out port2b,al		; displaying ':'
+[ 403]    066D: B0 11                                 		mov al,11h
+[ 404]    066F: E6 14                                 		out port2c,al
+[ 405]    0671: B0 10                                 		mov al,10h
+[ 406]    0673: E6 14                                 		out port2c,al
+[ 407]    0675: E8 15 FF                              		call delay_20ms
+[ 408]        :                                       		
+[ 409]        :                                       							
+[ 410]        :                                       		;displaying min
+[ 411]    0678: B9 00 00                              		mov cx,0
+[ 412]    067B: A0 53 0F                              		mov al,min
+[ 413]    067E: 8A D8                                 		mov       bl,al
+[ 414]    0680: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 415]    0682: 04 01                                 x3:		add       al,01
+[ 416]    0684: 27                                    	    daa
+[ 417]    0685: FE CB                                 	    dec       bl
+[ 418]    0687: 75 F9                                 	    jnz       x3
+[ 419]    0689: A2 58 0F                              		mov digit,al
+[ 420]        :                                       								
+[ 421]    068C: 24 F0                                 		and al,0f0h
+[ 422]    068E: B1 04                                 		mov cl,4
+[ 423]    0690: D2 C0                                 		rol al,cl
+[ 424]    0692: 04 30                                 		add al,30h
+[ 425]        :                                       								
+[ 426]    0694: E6 12                                 		out port2b,al
+[ 427]    0696: B0 11                                 		mov al,11h
+[ 428]    0698: E6 14                                 		out port2c,al
+[ 429]    069A: B0 10                                 		mov al,10h
+[ 430]    069C: E6 14                                 		out port2c,al
+[ 431]    069E: E8 EC FE                              		call delay_20ms
+[ 432]        :                                       								
+[ 433]    06A1: A0 58 0F                              		mov al,digit
+[ 434]    06A4: 24 0F                                 		and al,0fh
+[ 435]    06A6: 04 30                                 		add al,30h
+[ 436]        :                                       								
+[ 437]    06A8: E6 12                                 		out port2b,al
+[ 438]    06AA: B0 11                                 		mov al,11h
+[ 439]    06AC: E6 14                                 		out port2c,al
+[ 440]    06AE: B0 10                                 		mov al,10h
+[ 441]    06B0: E6 14                                 		out port2c,al
+[ 442]    06B2: E8 D8 FE                              		call delay_20ms
+[ 443]        :                                       		;display min completed
+[ 444]        :                                       		
+[ 445]        :                                       		;displaying ':'
+[ 446]    06B5: B0 3A                                 		mov al,3ah
+[ 447]    06B7: E6 12                                 		out port2b,al
+[ 448]    06B9: B0 11                                 		mov al,11h
+[ 449]    06BB: E6 14                                 		out port2c,al
+[ 450]    06BD: B0 10                                 		mov al,10h
+[ 451]    06BF: E6 14                                 		out port2c,al
+[ 452]    06C1: E8 C9 FE                              		call delay_20ms
+[ 453]        :                                       		
+[ 454]        :                                       		;display sec
+[ 455]        :                                       		
+[ 456]    06C4: A0 52 0F                              		mov al,second
+[ 457]    06C7: 8A D8                                 		mov       bl,al
+[ 458]    06C9: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 459]    06CB: 04 01                                 x4:		add       al,01
+[ 460]    06CD: 27                                    	    daa
+[ 461]    06CE: FE CB                                 	    dec       bl
+[ 462]    06D0: 75 F9                                 	    jnz       x4
+[ 463]    06D2: A2 58 0F                              		mov digit,al
+[ 464]        :                                       								
+[ 465]    06D5: 24 F0                                 		and al,0f0h
+[ 466]    06D7: B1 04                                 		mov cl,4
+[ 467]    06D9: D2 C0                                 		rol al,cl
+[ 468]    06DB: 04 30                                 		add al,30h
+[ 469]        :                                       								
+[ 470]    06DD: E6 12                                 		out port2b,al
+[ 471]    06DF: B0 11                                 		mov al,11h
+[ 472]    06E1: E6 14                                 		out port2c,al
+[ 473]    06E3: B0 10                                 		mov al,10h
+[ 474]    06E5: E6 14                                 		out port2c,al
+[ 475]    06E7: E8 A3 FE                              		call delay_20ms
+[ 476]        :                                       								
+[ 477]    06EA: A0 58 0F                              		mov al,digit
+[ 478]    06ED: 24 0F                                 		and al,0fh
+[ 479]    06EF: 04 30                                 		add al,30h
+[ 480]        :                                       								
+[ 481]    06F1: E6 12                                 		out port2b,al
+[ 482]    06F3: B0 11                                 		mov al,11h
+[ 483]    06F5: E6 14                                 		out port2c,al
+[ 484]    06F7: B0 10                                 		mov al,10h
+[ 485]    06F9: E6 14                                 		out port2c,al
+[ 486]    06FB: E8 8F FE                              		call delay_20ms
+[ 487]        :                                       		;display_sec completed
+[ 488]        :                                       		
+[ 489]        :                                       	;Checking for format again
+[ 490]    06FE: A0 5A 0F                              		mov al,format_check			
+[ 491]    0701: 3C 01                                 		cmp al,1				
+[ 492]    0703: 74 51                                 		je skip2
+[ 493]        :                                       		
+[ 494]        :                                       		;space
+[ 495]    0705: B0 20                                 		mov al,20h
+[ 496]    0707: E6 12                                 		out port2b, al
+[ 497]    0709: B0 11                                 		mov al,11h
+[ 498]    070B: E6 14                                 		out port2c,al
+[ 499]    070D: B0 10                                 		mov al,10h
+[ 500]    070F: E6 14                                 		out port2c,al
+[ 501]        :                                       		
+[ 502]        :                                       								;checking am or pm			
+[ 503]    0711: A0 5C 0F                              		mov al,phase
+[ 504]    0714: 3C 01                                 		cmp al,1
+[ 505]    0716: 74 20                                 		je pm1
+[ 506]        :                                       	
+[ 507]        :                                       		;Displaying 'am'
+[ 508]    0718: B0 41                                 		mov al,41h
+[ 509]    071A: E6 12                                 		out port2b, al
+[ 510]    071C: B0 11                                 		mov al,11h
+[ 511]    071E: E6 14                                 		out port2c,al
+[ 512]    0720: B0 10                                 		mov al,10h
+[ 513]    0722: E6 14                                 		out port2c,al
+[ 514]    0724: E8 66 FE                              		call delay_20ms
+[ 515]        :                                       		
+[ 516]    0727: B0 4D                                 		mov al,4dh
+[ 517]    0729: E6 12                                 		out port2b,al
+[ 518]    072B: B0 11                                 		mov al,11h
+[ 519]    072D: E6 14                                 		out port2c,al
+[ 520]    072F: B0 10                                 		mov al,10h
+[ 521]    0731: E6 14                                 		out port2c,al
+[ 522]    0733: E8 57 FE                              		call delay_20ms
+[ 523]    0736: EB 1E                                 		jmp skip2
+[ 524]        :                                       		
+[ 525]        :                                       		;Displaying 'pm'
+[ 526]        :                                       
+[ 527]    0738:                                       pm1:
+[ 528]    0738: B0 50                                 		mov al,50h
+[ 529]    073A: E6 12                                 		out port2b, al
+[ 530]    073C: B0 11                                 		mov al,11h
+[ 531]    073E: E6 14                                 		out port2c,al
+[ 532]    0740: B0 10                                 		mov al,10h
+[ 533]    0742: E6 14                                 		out port2c,al
+[ 534]    0744: E8 46 FE                              		call delay_20ms
+[ 535]        :                                       		
+[ 536]    0747: B0 4D                                 		mov al,4Dh
+[ 537]    0749: E6 12                                 		out port2b, al
+[ 538]    074B: B0 11                                 		mov al,11h
+[ 539]    074D: E6 14                                 		out port2c,al
+[ 540]    074F: B0 10                                 		mov al,10h
+[ 541]    0751: E6 14                                 		out port2c,al
+[ 542]    0753: E8 37 FE                              		call delay_20ms
+[ 543]        :                                       
+[ 544]        :                                       		
+[ 545]    0756:                                       skip2:	
+[ 546]        :                                       		;next line, 6th position
+[ 547]        :                                       
+[ 548]    0756: B0 C6                                 		mov al,0C6h
+[ 549]    0758: E6 12                                 		out port2b,al
+[ 550]    075A: B0 01                                 		mov al,01h
+[ 551]    075C: E6 14                                 		out port2c,al
+[ 552]    075E: B0 00                                 		mov al,00h
+[ 553]    0760: E6 14                                 		out port2c,al
+[ 554]    0762: E8 28 FE                              		call delay_20ms
+[ 555]        :                                       		
+[ 556]        :                                       		;Displaying date
+[ 557]        :                                       		
+[ 558]    0765: A0 55 0F                              		mov al,day
+[ 559]    0768: 8A D8                                 		mov       bl,al
+[ 560]    076A: B0 00                                 	    mov       al,0
+[ 561]    076C: 04 01                                 x5:		add       al,01
+[ 562]    076E: 27                                    	    daa
+[ 563]    076F: FE CB                                 	    dec       bl
+[ 564]    0771: 75 F9                                 	    jnz       x5
+[ 565]    0773: A2 58 0F                              		mov digit,al
+[ 566]        :                                       							
+[ 567]    0776: 24 F0                                 		and al,0f0h
+[ 568]    0778: B1 04                                 		mov cl,4
+[ 569]    077A: D2 C0                                 		rol al,cl
+[ 570]    077C: 04 30                                 		add al,30h
+[ 571]        :                                       							
+[ 572]    077E: E6 12                                 		out port2b,al
+[ 573]    0780: B0 11                                 		mov al,11h
+[ 574]    0782: E6 14                                 		out port2c,al
+[ 575]    0784: B0 10                                 		mov al,10h
+[ 576]    0786: E6 14                                 		out port2c,al
+[ 577]    0788: E8 02 FE                              		call delay_20ms
+[ 578]        :                                       							
+[ 579]    078B: A0 58 0F                              		mov al,digit
+[ 580]    078E: 24 0F                                 		and al,0fh
+[ 581]    0790: 04 30                                 		add al,30h
+[ 582]        :                                       							
+[ 583]    0792: E6 12                                 		out port2b,al
+[ 584]    0794: B0 11                                 		mov al,11h
+[ 585]    0796: E6 14                                 		out port2c,al
+[ 586]    0798: B0 10                                 		mov al,10h
+[ 587]    079A: E6 14                                 		out port2c,al
+[ 588]    079C: E8 EE FD                              		call delay_20ms
+[ 589]        :                                       		;display_day completed
+[ 590]        :                                       		
+[ 591]        :                                       		;displaying '/'
+[ 592]    079F: B0 2F                                 		mov al,2fh
+[ 593]    07A1: E6 12                                 		out port2b,al
+[ 594]    07A3: B0 11                                 		mov al,11h
+[ 595]    07A5: E6 14                                 		out port2c,al
+[ 596]    07A7: B0 10                                 		mov al,10h
+[ 597]    07A9: E6 14                                 		out port2c,al
+[ 598]    07AB: E8 DF FD                              		call delay_20ms
+[ 599]        :                                       		
+[ 600]        :                                       		;display month
+[ 601]        :                                       		
+[ 602]    07AE: A0 56 0F                              		mov al,month
+[ 603]    07B1: 8A D8                                 		mov       bl,al
+[ 604]    07B3: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 605]    07B5: 04 01                                 x6:		add       al,01
+[ 606]    07B7: 27                                    	    daa
+[ 607]    07B8: FE CB                                 	    dec       bl
+[ 608]    07BA: 75 F9                                 	    jnz       x6
+[ 609]    07BC: A2 58 0F                              		mov digit,al
+[ 610]        :                                       			
+[ 611]    07BF: 24 F0                                 		and al,0f0h			
+[ 612]    07C1: B1 04                                 		mov cl,4
+[ 613]    07C3: D2 C0                                 		rol al,cl
+[ 614]    07C5: 04 30                                 		add al,30h
+[ 615]        :                                       		
+[ 616]    07C7: E6 12                                 		out port2b,al		
+[ 617]    07C9: B0 11                                 		mov al,11h
+[ 618]    07CB: E6 14                                 		out port2c,al
+[ 619]    07CD: B0 10                                 		mov al,10h
+[ 620]    07CF: E6 14                                 		out port2c,al
+[ 621]    07D1: E8 B9 FD                              		call delay_20ms
+[ 622]        :                                       		
+[ 623]    07D4: A0 58 0F                              		mov al,digit		
+[ 624]    07D7: 24 0F                                 		and al,0fh
+[ 625]    07D9: 04 30                                 		add al,30h
+[ 626]        :                                       		
+[ 627]    07DB: E6 12                                 		out port2b,al		
+[ 628]    07DD: B0 11                                 		mov al,11h
+[ 629]    07DF: E6 14                                 		out port2c,al
+[ 630]    07E1: B0 10                                 		mov al,10h
+[ 631]    07E3: E6 14                                 		out port2c,al
+[ 632]    07E5: E8 A5 FD                              		call delay_20ms
+[ 633]        :                                       		;display_month completed
+[ 634]        :                                       		
+[ 635]        :                                       		;displaying '/'
+[ 636]    07E8: B0 2F                                 		mov al,2fh
+[ 637]    07EA: E6 12                                 		out port2b,al
+[ 638]    07EC: B0 11                                 		mov al,11h
+[ 639]    07EE: E6 14                                 		out port2c,al
+[ 640]    07F0: B0 10                                 		mov al,10h
+[ 641]    07F2: E6 14                                 		out port2c,al
+[ 642]    07F4: E8 96 FD                              		call delay_20ms
+[ 643]        :                                       		
+[ 644]        :                                       		;display year
+[ 645]        :                                       		 		
+[ 646]        :                                       		
+[ 647]        :                                       		;display 2
+[ 648]    07F7: B0 32                                 		mov al,32h
+[ 649]    07F9: E6 12                                 		out port2b,al
+[ 650]    07FB: B0 11                                 		mov al,11h
+[ 651]    07FD: E6 14                                 		out port2c,al
+[ 652]    07FF: B0 10                                 		mov al,10h
+[ 653]    0801: E6 14                                 		out port2c,al
+[ 654]    0803: E8 87 FD                              		call delay_20ms
+[ 655]        :                                       		
+[ 656]        :                                       		;display 0
+[ 657]    0806: B0 30                                 		mov al,30h
+[ 658]    0808: E6 12                                 		out port2b,al
+[ 659]    080A: B0 11                                 		mov al,11h
+[ 660]    080C: E6 14                                 		out port2c,al
+[ 661]    080E: B0 10                                 		mov al,10h
+[ 662]    0810: E6 14                                 		out port2c,al
+[ 663]    0812: E8 78 FD                              		call delay_20ms
+[ 664]        :                                       		
+[ 665]        :                                       		
+[ 666]        :                                       		;display year_last 2 digits
+[ 667]        :                                       		
+[ 668]    0815: A0 57 0F                              		mov al,year
+[ 669]    0818: 8A D8                                 		mov       bl,al
+[ 670]    081A: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[ 671]    081C: 04 01                                 x7:		add       al,01
+[ 672]    081E: 27                                    	    daa
+[ 673]    081F: FE CB                                 	    dec       bl
+[ 674]    0821: 75 F9                                 	    jnz       x7
+[ 675]    0823: A2 58 0F                              		mov digit,al
+[ 676]        :                                       						
+[ 677]    0826: 24 F0                                 		and al,0f0h			
+[ 678]    0828: B1 04                                 		mov cl,4
+[ 679]    082A: D2 C0                                 		rol al,cl
+[ 680]    082C: 04 30                                 		add al,30h
+[ 681]        :                                       							
+[ 682]    082E: E6 12                                 		out port2b,al
+[ 683]    0830: B0 11                                 		mov al,11h
+[ 684]    0832: E6 14                                 		out port2c,al
+[ 685]    0834: B0 10                                 		mov al,10h
+[ 686]    0836: E6 14                                 		out port2c,al
+[ 687]    0838: E8 52 FD                              		call delay_20ms
+[ 688]        :                                       							
+[ 689]    083B: A0 58 0F                              		mov al,digit
+[ 690]    083E: 24 0F                                 		and al,0fh
+[ 691]    0840: 04 30                                 		add al,30h
+[ 692]        :                                       							
+[ 693]    0842: E6 12                                 		out port2b,al
+[ 694]    0844: B0 11                                 		mov al,11h
+[ 695]    0846: E6 14                                 		out port2c,al
+[ 696]    0848: B0 10                                 		mov al,10h
+[ 697]    084A: E6 14                                 		out port2c,al
+[ 698]    084C: E8 3E FD                              		call delay_20ms
+[ 699]        :                                       		
+[ 700]        :                                       		;display_year completed
+[ 701]        :                                       		
+[ 702]        :                                       		
+[ 703]        :                                       		
+[ 704]        :                                       		
+[ 705]        :                                       		
+[ 706]        :                                       		
+[ 707]    084F: C3                                    		ret
+[ 708]        :                                       	display endp				;Display procedure ends here
+[ 709]        :                                       	
+[ 710]        :                                       	
+[ 711]        :                                       	
+[ 712]        :                                       	;procedure to set hour
+[ 713]    0850:                                       set_hour proc near
+[ 714]    0850: E8 43 FD                              call display
+[ 715]        :                                       	
+[ 716]    0853:                                       sh1:	
+[ 717]    0853: E4 04                                 	in al,port1c
+[ 718]    0855: 3C 80                                 	cmp al,80h			
+[ 719]    0857: 74 03 E9 BC 00                        	jnz sh2						; if set hour is not high then ret		
+[ 720]        :                                       	
+[ 721]        :                                       	
+[ 722]    085C: E4 00                                 	in al,port1a			;Check format
+[ 723]    085E: 24 01                                 		and al,01h		
+[ 724]    0860: 8A 1E 5A 0F                           		mov bl,format_check	
+[ 725]    0864: 3A C3                                 		cmp al,bl
+[ 726]    0866: 74 03                                 		je n1		
+[ 727]    0868: E8 2B FD                              		call display		;display if format changed
+[ 728]    086B:                                       n1:   		
+[ 729]        :                                       	
+[ 730]    086B: E4 02                                 	in al,port1b
+[ 731]    086D: 3C 01                                 	cmp al,01h					
+[ 732]    086F: 75 51                                 	jnz sh3							
+[ 733]    0871: 8A 1E 54 0F                           	mov bl,hour			
+[ 734]    0875: FE CB                                 	dec bl			
+[ 735]    0877: 80 FB 00                              	cmp bl,00 			
+[ 736]    087A: 7D 02                                 	jge sh5				
+[ 737]        :                                       	
+[ 738]        :                                       	
+[ 739]    087C: B3 17                                 	    mov bl,23			;If the hour value goes lower than 0 make it 23
+[ 740]    087E:                                       sh5:	
+[ 741]    087E: 88 1E 54 0F                           	    mov hour,bl			
+[ 742]    0882: A0 54 0F                              		mov al,hour			
+[ 743]    0885: 3C 00                                 		cmp al,00		;12 AM
+[ 744]    0887: 75 0C                                 		jne shr01
+[ 745]    0889: C6 06 5B 0F 0C                        		mov hour_12 , 12	
+[ 746]    088E: C6 06 5C 0F 00                        		mov phase,0
+[ 747]    0893: EB 28                                 		jmp exit1		
+[ 748]    0895:                                       shr01:		
+[ 749]    0895: 3C 0C                                 		cmp al,12		
+[ 750]    0897: 75 0C                                 		jne shr04		;12 PM
+[ 751]    0899: C6 06 5B 0F 0C                        		mov hour_12,12
+[ 752]    089E: C6 06 5C 0F 01                        		mov phase,1
+[ 753]    08A3: EB 18                                 		jmp exit1
+[ 754]    08A5:                                       shr04:		
+[ 755]    08A5: 3C 0C                                 		cmp al,12		;am
+[ 756]    08A7: 77 0A                                 		ja shr02
+[ 757]    08A9: A2 5B 0F                              		mov hour_12,al
+[ 758]    08AC: C6 06 5C 0F 00                        		mov phase,0
+[ 759]    08B1: EB 0A                                 		jmp exit1
+[ 760]    08B3:                                       shr02:		
+[ 761]    08B3: 2C 0C                                 		sub al,12
+[ 762]    08B5: A2 5B 0F                              		mov hour_12,al	
+[ 763]    08B8: C6 06 5C 0F 01                        		mov phase,1
+[ 764]        :                                       						; display
+[ 765]    08BD: E8 D6 FC                              exit1:	call display			
+[ 766]    08C0: EB 91                                 		jmp sh1			;check again
+[ 767]    08C2:                                       sh3:		
+[ 768]        :                                       		;To check increment
+[ 769]    08C2: 3C 02                                 		cmp al,02h		
+[ 770]    08C4: 75 8D                                 		jne sh1			
+[ 771]    08C6: 8A 1E 54 0F                           		mov bl,hour		
+[ 772]    08CA: FE C3                                 		inc bl
+[ 773]    08CC: 80 FB 18                              		cmp bl,24			
+[ 774]    08CF: 72 02                                 		jb sh6
+[ 775]    08D1: B3 00                                 		mov bl,00		
+[ 776]    08D3: 88 1E 54 0F                           sh6:	mov hour,bl
+[ 777]        :                                       						;setting hour_12
+[ 778]    08D7: A0 54 0F                              		mov al,hour
+[ 779]    08DA: 3C 00                                 		cmp al,00
+[ 780]    08DC: 75 B7                                 		jne shr01
+[ 781]    08DE: C6 06 5B 0F 0C                        		mov hour_12 , 12
+[ 782]    08E3: C6 06 5C 0F 00                        		mov phase,0
+[ 783]    08E8: EB 28                                 		jmp exit2
+[ 784]    08EA: 3C 0C                                 shr11:		cmp al,12
+[ 785]    08EC: 75 B7                                 		jne shr04
+[ 786]    08EE: C6 06 5B 0F 0C                        		mov hour_12,12
+[ 787]    08F3: C6 06 5C 0F 01                        		mov phase,1
+[ 788]    08F8: EB 18                                 		jmp exit2
+[ 789]    08FA: 3C 0C                                 shr14:		cmp al,12
+[ 790]    08FC: 77 B5                                 		ja shr02
+[ 791]    08FE: A2 5B 0F                              		mov hour_12,al
+[ 792]    0901: C6 06 5C 0F 00                        		mov phase,0
+[ 793]    0906: EB 0A                                 		jmp exit2
+[ 794]    0908: 2C 0C                                 shr12:		sub al,12
+[ 795]    090A: A2 5B 0F                              		mov hour_12,al	
+[ 796]    090D: C6 06 5C 0F 01                        		mov phase,1
+[ 797]        :                                       						;incrementing hour done 					
+[ 798]    0912: E8 81 FC                              exit2:	call display
+[ 799]    0915: E9 3B FF                              		jmp sh1
+[ 800]    0918: C3                                    sh2:		ret			;End of set_hour
+[ 801]        :                                       
+[ 802]        :                                       set_hour endp
+[ 803]        :                                       
+[ 804]        :                                       						;set_month
+[ 805]    0919:                                       set_month proc near
+[ 806]    0919: E8 7A FC                              call display
+[ 807]    091C: E4 04                                 mon1:	in al,port1c
+[ 808]    091E: 3C 08                                 	cmp al,08h
+[ 809]    0920: 75 6B                                 	jne mon2
+[ 810]    0922: E4 00                                 	in al,port1a			;Check format
+[ 811]    0924: 24 01                                 		and al,01h		
+[ 812]    0926: 8A 1E 5A 0F                           		mov bl,format_check	
+[ 813]    092A: 3A C3                                 		cmp al,bl
+[ 814]    092C: 74 03                                 		je n3		
+[ 815]    092E: E8 65 FC                              		call display		;display if format changed
+[ 816]    0931:                                       n3:   		
+[ 817]    0931: E4 04                                 		in al,port1c		;check set_month  debounce
+[ 818]    0933: 3C 08                                 		cmp al,08h		
+[ 819]    0935: 75 56                                 		jne mon2			
+[ 820]    0937: E4 00                                 		in al,port1a		
+[ 821]    0939: 24 01                                 		and al,01h
+[ 822]    093B: 8A 1E 5A 0F                           		mov bl,format_check
+[ 823]    093F: 3A C3                                 		cmp al,bl				
+[ 824]    0941: 74 03                                 		je n4			
+[ 825]    0943: E8 50 FC                              		call display
+[ 826]        :                                       
+[ 827]    0946: E4 02                                 n4:	    in al,port1b			;debounce for inc/dec
+[ 828]    0948: 3C 00                                 	cmp al,00
+[ 829]    094A: 74 E5                                 	je n3
+[ 830]    094C: 8A D8                                 	mov bl,al
+[ 831]    094E: E8 3C FC                              	call delay_20ms
+[ 832]    0951: E4 02                                 	in al,port1b
+[ 833]    0953: 3A C3                                 	cmp al,bl
+[ 834]    0955: 75 DA                                 	jne n3
+[ 835]        :                                       			
+[ 836]    0957: E4 02                                 	in al,port1b
+[ 837]    0959: 3C 01                                 	cmp al,01h
+[ 838]    095B: 75 16                                 	jne mon3
+[ 839]    095D: 8A 1E 56 0F                           	mov bl,month
+[ 840]    0961: FE CB                                 	dec bl
+[ 841]    0963: 80 FB 00                              	cmp bl,0
+[ 842]    0966: 75 02                                 	jne mon4
+[ 843]    0968: B3 0C                                 	mov bl,12
+[ 844]    096A: 88 1E 56 0F                           mon4:	mov month,bl			;Decrement
+[ 845]    096E: E8 25 FC                              	call display
+[ 846]    0971: EB A9                                 	jmp mon1
+[ 847]    0973: 3C 02                                 mon3:	cmp al,02h
+[ 848]    0975: 75 A5                                 	jne mon1
+[ 849]    0977: 8A 1E 56 0F                           	mov bl,month				;Increment
+[ 850]    097B: FE C3                                 	inc bl
+[ 851]    097D: 80 FB 0D                              	cmp bl,13
+[ 852]    0980: 75 02                                 	jne mon5
+[ 853]    0982: B3 01                                 	mov bl,1
+[ 854]    0984: 88 1E 56 0F                           mon5:	mov month,bl
+[ 855]    0988: E8 0B FC                              	call display
+[ 856]    098B: EB 8F                                 	jmp mon1
+[ 857]    098D: C3                                    mon2:	ret
+[ 858]        :                                       set_month endp
+[ 859]        :                                       
+[ 860]        :                                       						
+[ 861]        :                                       									;set_minute function starts			
+[ 862]    098E:                                       set_minute proc near
+[ 863]        :                                       
+[ 864]    098E: E8 05 FC                              call display
+[ 865]        :                                       
+[ 866]    0991: E4 04                                 m1:	in al,port1c			
+[ 867]    0993: 3C 40                                 	cmp al,40h
+[ 868]    0995: 75 6C                                 	jnz m2
+[ 869]        :                                       	
+[ 870]    0997: E4 00                                 	in al,port1a			;Check format
+[ 871]    0999: 24 01                                 		and al,01h		
+[ 872]    099B: 8A 1E 5A 0F                           		mov bl,format_check	
+[ 873]    099F: 3A C3                                 		cmp al,bl
+[ 874]    09A1: 74 03                                 		je n5		
+[ 875]    09A3: E8 F0 FB                              		call display		;display if format changed
+[ 876]    09A6:                                       n5:   		
+[ 877]    09A6: E4 04                                 		in al,port1c		;check set_minute  debounce
+[ 878]    09A8: 3C 40                                 		cmp al,40h		
+[ 879]    09AA: 75 57                                 		jne m2			
+[ 880]    09AC: E4 00                                 		in al,port1a		
+[ 881]    09AE: 24 01                                 		and al,01h
+[ 882]    09B0: 8A 1E 5A 0F                           		mov bl,format_check
+[ 883]    09B4: 3A C3                                 		cmp al,bl				
+[ 884]    09B6: 74 03                                 		je n6			
+[ 885]    09B8: E8 DB FB                              		call display
+[ 886]        :                                       
+[ 887]    09BB: E4 02                                 n6:	    in al,port1b			;debounce for inc/dec
+[ 888]    09BD: 3C 00                                 	cmp al,00
+[ 889]    09BF: 74 E5                                 	je n5
+[ 890]    09C1: 8A D8                                 	mov bl,al
+[ 891]    09C3: E8 C7 FB                              	call delay_20ms
+[ 892]    09C6: E4 02                                 	in al,port1b
+[ 893]    09C8: 3A C3                                 	cmp al,bl
+[ 894]    09CA: 75 DA                                 	jne n5
+[ 895]        :                                       	
+[ 896]        :                                       	 		
+[ 897]    09CC: E4 02                                 	in al,port1b			
+[ 898]    09CE: 3C 01                                 	cmp al,01h			
+[ 899]    09D0: 75 17                                 	jnz m3
+[ 900]    09D2: 8A 1E 53 0F                           	mov bl,min			;Decrement
+[ 901]    09D6: 80 FB 00                              	cmp bl,0			
+[ 902]    09D9: 75 03                                 	jnz m4				
+[ 903]    09DB: 80 C3 3C                              	add bl,60
+[ 904]    09DE: FE CB                                 m4:	dec bl
+[ 905]    09E0: 88 1E 53 0F                           	mov min,bl
+[ 906]    09E4: E8 AF FB                              	call display
+[ 907]    09E7: EB A8                                 	jmp m1
+[ 908]        :                                       	
+[ 909]    09E9: 3C 02                                 m3:	cmp al,02h
+[ 910]    09EB: 75 A4                                 	jnz m1				;Increment
+[ 911]    09ED: 8A 1E 53 0F                           	mov bl,min
+[ 912]    09F1: FE C3                                 	inc bl
+[ 913]    09F3: 80 FB 3C                              	cmp bl,60
+[ 914]    09F6: 75 02                                 	jnz m5
+[ 915]    09F8: B3 00                                 	mov bl,0
+[ 916]    09FA: 88 1E 53 0F                           m5:	mov min,bl
+[ 917]    09FE: E8 95 FB                              	call display
+[ 918]    0A01: EB 8E                                 	jmp m1
+[ 919]    0A03: C3                                    m2:	ret
+[ 920]        :                                       set_minute endp			
+[ 921]        :                                       
+[ 922]        :                                       						;set_date
+[ 923]    0A04:                                       set_date proc near
+[ 924]    0A04: E8 8F FB                              call display
+[ 925]    0A07: E4 04                                 da1:	in al,port1c
+[ 926]    0A09: 3C 10                                 	cmp al,10h
+[ 927]    0A0B: 75 6E                                 	jne da2
+[ 928]        :                                       	
+[ 929]    0A0D: E4 00                                 	    in al,port1a			;Check format
+[ 930]    0A0F: 24 01                                 		and al,01h		
+[ 931]    0A11: 8A 1E 5A 0F                           		mov bl,format_check	
+[ 932]    0A15: 3A C3                                 		cmp al,bl
+[ 933]    0A17: 74 03                                 		je n7		
+[ 934]    0A19: E8 7A FB                              		call display		;display if format changed
+[ 935]    0A1C:                                       n7:   		
+[ 936]    0A1C: E4 04                                 		in al,port1c		;check set_date  debounce
+[ 937]    0A1E: 3C 10                                 		cmp al,10h		
+[ 938]    0A20: 75 59                                 		jne da2			
+[ 939]    0A22: E4 00                                 		in al,port1a		
+[ 940]    0A24: 24 01                                 		and al,01h
+[ 941]    0A26: 8A 1E 5A 0F                           		mov bl,format_check
+[ 942]    0A2A: 3A C3                                 		cmp al,bl				
+[ 943]    0A2C: 74 03                                 		je n8			
+[ 944]    0A2E: E8 65 FB                              		call display
+[ 945]        :                                       
+[ 946]    0A31: E4 02                                 n8:	    in al,port1b			;debounce for inc/dec
+[ 947]    0A33: 3C 00                                 	cmp al,00
+[ 948]    0A35: 74 E5                                 	je n7
+[ 949]    0A37: 8A D8                                 	mov bl,al
+[ 950]    0A39: E8 51 FB                              	call delay_20ms
+[ 951]    0A3C: E4 02                                 	in al,port1b
+[ 952]    0A3E: 3A C3                                 	cmp al,bl
+[ 953]    0A40: 75 DA                                 	jne n7 		
+[ 954]        :                                       	
+[ 955]    0A42: E4 02                                 	in al,port1b
+[ 956]    0A44: 3C 01                                 	cmp al,01h
+[ 957]    0A46: 75 18                                 	jne da3
+[ 958]        :                                       	
+[ 959]    0A48: 8A 1E 55 0F                           	mov bl,day
+[ 960]    0A4C: FE CB                                 	dec bl
+[ 961]    0A4E: 80 FB 00                              	cmp bl,0
+[ 962]    0A51: 75 04                                 	jne da4
+[ 963]    0A53: 8A 1E 50 0F                           	mov bl,count_day
+[ 964]    0A57:                                       da4:	
+[ 965]    0A57: 88 1E 55 0F                           	mov day,bl					;Decrement
+[ 966]    0A5B: E8 38 FB                              	call display
+[ 967]    0A5E: EB A7                                 	jmp da1
+[ 968]    0A60: 3C 02                                 da3:	cmp al,02h
+[ 969]    0A62: 75 A3                                 	jne da1
+[ 970]    0A64: 8A 1E 55 0F                           	mov bl,day
+[ 971]    0A68: 3A 1E 50 0F                           	cmp bl,count_day			;Increment
+[ 972]    0A6C: 75 02                                 	jne da5
+[ 973]    0A6E: B3 00                                 	mov bl,0
+[ 974]    0A70: FE C3                                 da5:	inc bl
+[ 975]    0A72: 88 1E 55 0F                           	mov day,bl	
+[ 976]    0A76: E8 1D FB                              	call display
+[ 977]    0A79: EB 8C                                 	jmp da1
+[ 978]    0A7B: C3                                    da2:	ret
+[ 979]        :                                       set_date endp	
+[ 980]        :                                       
+[ 981]        :                                       						;set_second	
+[ 982]    0A7C:                                       set_second proc near
+[ 983]    0A7C: E8 17 FB                              call display
+[ 984]    0A7F: E4 04                                 s1:	in al,port1c
+[ 985]    0A81: 3C 20                                 	cmp al,20h
+[ 986]    0A83: 75 6C                                 	jnz s2
+[ 987]        :                                       	
+[ 988]    0A85: E4 00                                 	    in al,port1a			;Check format
+[ 989]    0A87: 24 01                                 		and al,01h		
+[ 990]    0A89: 8A 1E 5A 0F                           		mov bl,format_check	
+[ 991]    0A8D: 3A C3                                 		cmp al,bl
+[ 992]    0A8F: 74 03                                 		je n9		
+[ 993]    0A91: E8 02 FB                              		call display		;display if format changed
+[ 994]    0A94:                                       n9:   		
+[ 995]    0A94: E4 04                                 		in al,port1c		;check set_second  debounce
+[ 996]    0A96: 3C 20                                 		cmp al,20h		
+[ 997]    0A98: 75 57                                 		jne s2			
+[ 998]    0A9A: E4 00                                 		in al,port1a		
+[ 999]    0A9C: 24 01                                 		and al,01h
+[1000]    0A9E: 8A 1E 5A 0F                           		mov bl,format_check
+[1001]    0AA2: 3A C3                                 		cmp al,bl				
+[1002]    0AA4: 74 03                                 		je n10			
+[1003]    0AA6: E8 ED FA                              		call display
+[1004]        :                                       
+[1005]    0AA9: E4 02                                 n10:	    in al,port1b			;debounce for inc/dec
+[1006]    0AAB: 3C 00                                 	cmp al,00
+[1007]    0AAD: 74 E5                                 	je n9
+[1008]    0AAF: 8A D8                                 	mov bl,al
+[1009]    0AB1: E8 D9 FA                              	call delay_20ms
+[1010]    0AB4: E4 02                                 	in al,port1b
+[1011]    0AB6: 3A C3                                 	cmp al,bl
+[1012]    0AB8: 75 DA                                 	jne n9
+[1013]        :                                       		
+[1014]    0ABA: E4 02                                 	in al,port1b
+[1015]    0ABC: 3C 01                                 	cmp al,01h
+[1016]    0ABE: 75 17                                 	jnz s3
+[1017]    0AC0: 8A 1E 52 0F                           	mov bl,second
+[1018]    0AC4: 80 FB 00                              	cmp bl,0
+[1019]    0AC7: 75 03                                 	jnz s4
+[1020]    0AC9: 80 C3 3C                              	add bl,60
+[1021]    0ACC: FE CB                                 s4:	dec bl				;Decrement
+[1022]    0ACE: 88 1E 52 0F                           	mov second,bl
+[1023]    0AD2: E8 C1 FA                              	call display
+[1024]    0AD5: EB A8                                 	jmp s1
+[1025]        :                                       	
+[1026]    0AD7: 3C 02                                 s3:	cmp al,02h
+[1027]    0AD9: 75 A4                                 	jnz s1				;Increment
+[1028]    0ADB: 8A 1E 52 0F                           	mov bl,second
+[1029]    0ADF: FE C3                                 	inc bl
+[1030]    0AE1: 80 FB 3C                              	cmp bl,60
+[1031]    0AE4: 75 02                                 	jnz s5
+[1032]    0AE6: B3 00                                 	mov bl,0
+[1033]    0AE8: 88 1E 52 0F                           s5:	mov second,bl
+[1034]    0AEC: E8 A7 FA                              	call display
+[1035]    0AEF: EB 8E                                 	jmp s1
+[1036]        :                                       
+[1037]    0AF1: C3                                    s2:	ret				
+[1038]        :                                       
+[1039]        :                                       set_second endp
+[1040]        :                                       
+[1041]        :                                       
+[1042]        :                                       
+[1043]        :                                       
+[1044]        :                                       								;set_year
+[1045]    0AF2:                                       set_year proc near
+[1046]    0AF2: E8 A1 FA                              call display
+[1047]    0AF5: E4 04                                 ye1:	in al,port1c
+[1048]    0AF7: 3C 04                                 	cmp al,04h
+[1049]    0AF9: 75 6E                                 	jne ye2
+[1050]        :                                       	
+[1051]    0AFB: E4 00                                 	    	in al,port1a			;Check format
+[1052]    0AFD: 24 01                                 		and al,01h		
+[1053]    0AFF: 8A 1E 5A 0F                           		mov bl,format_check	
+[1054]    0B03: 3A C3                                 		cmp al,bl
+[1055]    0B05: 75 03 E9 9C FE                        		je n5		
+[1056]    0B0A: E8 89 FA                              		call display		;display if format changed
+[1057]    0B0D:                                       n11:   		
+[1058]    0B0D: E4 04                                 		in al,port1c		;check set_year  debounce
+[1059]    0B0F: 3C 04                                 		cmp al,04h		
+[1060]    0B11: 75 56                                 		jne ye2			
+[1061]    0B13: E4 00                                 		in al,port1a		
+[1062]    0B15: 24 01                                 		and al,01h
+[1063]    0B17: 8A 1E 5A 0F                           		mov bl,format_check
+[1064]    0B1B: 3A C3                                 		cmp al,bl				
+[1065]    0B1D: 74 03                                 		je n12			
+[1066]    0B1F: E8 74 FA                              		call display
+[1067]        :                                       
+[1068]    0B22: E4 02                                 n12:	in al,port1b			;debounce for inc/dec
+[1069]    0B24: 3C 00                                 	cmp al,00
+[1070]    0B26: 74 E5                                 	je n11
+[1071]    0B28: 8A D8                                 	mov bl,al
+[1072]    0B2A: E8 60 FA                              	call delay_20ms
+[1073]    0B2D: E4 02                                 	in al,port1b
+[1074]    0B2F: 3A C3                                 	cmp al,bl
+[1075]    0B31: 75 DA                                 	jne n11	
+[1076]        :                                       		
+[1077]    0B33: E4 02                                 	in al,port1b
+[1078]    0B35: 3C 01                                 	cmp al,01h
+[1079]    0B37: 75 16                                 	jne ye3
+[1080]    0B39: 8A 1E 57 0F                           	mov bl,year
+[1081]    0B3D: 80 FB 00                              	cmp bl,00
+[1082]    0B40: 75 02                                 	jne ye4
+[1083]    0B42: FE C3                                 	inc bl
+[1084]    0B44: FE CB                                 ye4:	dec bl				;Decrement
+[1085]    0B46: 88 1E 57 0F                           	mov year,bl
+[1086]    0B4A: E8 49 FA                              	call display
+[1087]    0B4D: EB A6                                 	jmp ye1
+[1088]    0B4F: 3C 02                                 ye3:	cmp al,02h
+[1089]    0B51: 75 A2                                 	jne ye1
+[1090]    0B53: 8A 1E 57 0F                           	mov bl,year
+[1091]        :                                       	
+[1092]    0B57: 80 FB 63                              	cmp bl,99
+[1093]    0B5A: 75 02                                 	jne ye5
+[1094]    0B5C: FE CB                                 	dec bl					;Increment
+[1095]    0B5E: FE C3                                 ye5:	inc bl
+[1096]    0B60: 88 1E 57 0F                           	mov year,bl
+[1097]    0B64: E8 2F FA                              	call display
+[1098]    0B67: EB 8C                                 	jmp ye1
+[1099]    0B69: C3                                    ye2:	ret
+[1100]        :                                       set_year endp
+[1101]        :                                       					
+[1102]        :                                       
+[1103]        :                                       
+[1104]        :                                       	;set_alarm_hour		
+[1105]        :                                       
+[1106]    0B6A:                                       set_alarm_hour proc near
+[1107]        :                                       
+[1108]    0B6A: C6 06 5D 0F 00                        mov alarm_hour,00				; default values of set_alarm hour
+[1109]    0B6F: C6 06 5E 0F 0C                        mov alarm_hour_12,12
+[1110]    0B74: C6 06 60 0F 00                        mov alarm_phase,0
+[1111]        :                                       							
+[1112]    0B79:                                       alh1:	
+[1113]    0B79: E4 04                                 	in al,port1c				
+[1114]    0B7B: 3C 02                                 	cmp al,02h
+[1115]    0B7D: 74 03 E9 CD 00                        	jne alh2					;If set alarm hour is not selected, end.
+[1116]        :                                       	
+[1117]    0B82: E4 00                                 	in al,port1a				;Checking alarm on or off
+[1118]    0B84: 24 10                                 	and al,10h					
+[1119]    0B86: 3C 10                                 	cmp al,10h				
+[1120]    0B88: 74 03 E9 C2 00                        	jne alh2					
+[1121]        :                                       	
+[1122]    0B8D: E8 87 02                              	call alarm_display				
+[1123]        :                                       	
+[1124]    0B90: E4 00                                 	    in al,port1a			;Check format
+[1125]    0B92: 24 01                                 		and al,01h		
+[1126]    0B94: 8A 1E 5A 0F                           		mov bl,format_check	
+[1127]    0B98: 3A C3                                 		cmp al,bl
+[1128]    0B9A: 74 03                                 		je n13		
+[1129]    0B9C: E8 78 02                              		call alarm_display		;display if format changed
+[1130]    0B9F:                                       n13:   		
+[1131]        :                                       				
+[1132]        :                                       										
+[1133]    0B9F: E4 02                                 	in al,port1b				
+[1134]    0BA1: 3C 01                                 	cmp al,01h					
+[1135]    0BA3: 75 51                                 	jnz alh3						
+[1136]    0BA5: 8A 1E 5D 0F                           	mov bl,alarm_hour		
+[1137]    0BA9: FE CB                                 	dec bl						;decrement alarm_hour
+[1138]    0BAB: 80 FB 00                              	cmp bl,00
+[1139]    0BAE: 7D 02                                 	jge alh5
+[1140]    0BB0: B3 17                                 	mov bl,23					; if the hour becomes less than 0, make it 23
+[1141]        :                                       	
+[1142]    0BB2:                                       alh5:
+[1143]    0BB2: 88 1E 5D 0F                           	mov alarm_hour,bl
+[1144]        :                                       								;12hr format
+[1145]    0BB6: A0 5D 0F                              	mov al,alarm_hour
+[1146]    0BB9: 3C 00                                 		cmp al,00
+[1147]    0BBB: 75 0C                                 		jne alha1
+[1148]    0BBD: C6 06 5E 0F 0C                        		mov alarm_hour_12 , 12
+[1149]    0BC2: C6 06 60 0F 00                        		mov alarm_phase,0
+[1150]    0BC7: EB 28                                 		jmp exita1
+[1151]    0BC9:                                       alha1:		
+[1152]    0BC9: 3C 0C                                 		cmp al,12
+[1153]    0BCB: 75 0C                                 		jne alha4
+[1154]    0BCD: C6 06 5E 0F 0C                        		mov alarm_hour_12,12
+[1155]    0BD2: C6 06 60 0F 01                        		mov alarm_phase,1				
+[1156]    0BD7: EB 18                                 		jmp exita1
+[1157]    0BD9: 3C 0C                                 alha4:		cmp al,12
+[1158]    0BDB: 77 0A                                 		ja alha2
+[1159]    0BDD: A2 5E 0F                              		mov alarm_hour_12,al
+[1160]    0BE0: C6 06 60 0F 00                        		mov alarm_phase,0
+[1161]    0BE5: EB 0A                                 		jmp exita1
+[1162]    0BE7: 2C 0C                                 alha2:		sub al,12
+[1163]    0BE9: A2 5E 0F                              		mov alarm_hour_12,al	
+[1164]    0BEC: C6 06 60 0F 01                        		mov alarm_phase,1
+[1165]        :                                       							;end
+[1166]    0BF1: E8 23 02                              exita1:	call alarm_display				
+[1167]    0BF4: EB 83                                 		jmp alh1						
+[1168]    0BF6: 3C 02                                 alh3:		cmp al,02h								
+[1169]    0BF8: 74 03 E9 7C FF                        		jne alh1
+[1170]    0BFD: 8A 1E 5D 0F                           		mov bl,alarm_hour
+[1171]    0C01: FE C3                                 		inc bl
+[1172]    0C03: 80 FB 18                              		cmp bl,24
+[1173]    0C06: 72 02                                 		jb alh6
+[1174]    0C08: B3 00                                 		mov bl,00
+[1175]    0C0A: 88 1E 5D 0F                           alh6:		mov alarm_hour,bl
+[1176]        :                                       		;12hr
+[1177]    0C0E: A0 5D 0F                              		mov al,alarm_hour
+[1178]    0C11: 3C 00                                 		cmp al,00
+[1179]    0C13: 75 0C                                 		jne alhb1						
+[1180]    0C15: C6 06 5E 0F 0C                        		mov alarm_hour_12 , 12
+[1181]    0C1A: C6 06 60 0F 00                        		mov alarm_phase,0
+[1182]    0C1F: EB 28                                 		jmp exita2
+[1183]    0C21: 3C 0C                                 alhb1:		cmp al,12
+[1184]    0C23: 75 0C                                 		jne alhb4
+[1185]    0C25: C6 06 5E 0F 0C                        		mov alarm_hour_12,12
+[1186]    0C2A: C6 06 60 0F 01                        		mov alarm_phase,1
+[1187]    0C2F: EB 18                                 		jmp exita2
+[1188]    0C31: 3C 0C                                 alhb4:		cmp al,12
+[1189]    0C33: 77 0A                                 		ja alhb2
+[1190]    0C35: A2 5E 0F                              		mov alarm_hour_12,al
+[1191]    0C38: C6 06 60 0F 00                        		mov alarm_phase,0
+[1192]    0C3D: EB 0A                                 		jmp exita2
+[1193]    0C3F: 2C 0C                                 alhb2:		sub al,12
+[1194]    0C41: A2 5E 0F                              		mov alarm_hour_12,al	
+[1195]    0C44: C6 06 60 0F 01                        		mov alarm_phase,1
+[1196]        :                                       								;end
+[1197]    0C49: E8 CB 01                              exita2:	call alarm_display
+[1198]    0C4C: E9 2A FF                              		jmp alh1				
+[1199]        :                                       	
+[1200]    0C4F: C3                                    alh2:	ret							
+[1201]        :                                       
+[1202]        :                                       set_alarm_hour endp
+[1203]        :                                       
+[1204]        :                                       								;set_alarm_min
+[1205]    0C50:                                       set_alarm_min proc near
+[1206]    0C50: C6 06 5F 0F 00                        	mov alarm_min,00
+[1207]        :                                       	
+[1208]    0C55: E4 00                                 al1:	in al,port1a
+[1209]    0C57: 24 10                                 		and al,10h					;checking if set_alarm minute is on
+[1210]    0C59: 3C 10                                 		cmp al,10h	
+[1211]    0C5B: 75 76                                 		jne al2						;end if off
+[1212]    0C5D: E4 04                                 		in al,port1c
+[1213]    0C5F: 3C 01                                 		cmp al,01h
+[1214]    0C61: 75 70                                 		jnz al2 						
+[1215]    0C63: E8 B1 01                              		call alarm_display				
+[1216]        :                                       		
+[1217]    0C66: E4 00                                 		in al,port1a			;Check format
+[1218]    0C68: 24 01                                 		and al,01h		
+[1219]    0C6A: 8A 1E 5A 0F                           		mov bl,format_check	
+[1220]    0C6E: 3A C3                                 		cmp al,bl
+[1221]    0C70: 74 03                                 		je n15		
+[1222]    0C72: E8 A2 01                              		call alarm_display		;display if format changed
+[1223]    0C75:                                       n15:   		
+[1224]    0C75: E4 04                                 		in al,port1c		;check set_alarm_min  debounce
+[1225]    0C77: 3C 01                                 		cmp al,01h		
+[1226]    0C79: 75 58                                 		jne al2			
+[1227]    0C7B: E4 00                                 		in al,port1a		
+[1228]    0C7D: 24 01                                 		and al,01h
+[1229]    0C7F: 8A 1E 5A 0F                           		mov bl,format_check
+[1230]    0C83: 3A C3                                 		cmp al,bl				
+[1231]    0C85: 74 03                                 		je n16			
+[1232]    0C87: E8 8D 01                              		call alarm_display
+[1233]        :                                       
+[1234]    0C8A: E4 02                                 n16:	    in al,port1b			;debounce for inc/dec
+[1235]    0C8C: 3C 00                                 	cmp al,00
+[1236]    0C8E: 74 E5                                 	je n15
+[1237]    0C90: 8A D8                                 	mov bl,al
+[1238]    0C92: E8 F8 F8                              	call delay_20ms
+[1239]    0C95: E4 02                                 	in al,port1b
+[1240]    0C97: 3A C3                                 	cmp al,bl
+[1241]    0C99: 75 DA                                 	jne n15
+[1242]        :                                       		
+[1243]    0C9B: E4 02                                 		in al,port1b					
+[1244]    0C9D: E4 02                                 		in al,port1b
+[1245]    0C9F: 3C 01                                 		cmp al,01h					; decrement
+[1246]    0CA1: 75 16                                 		jnz al3
+[1247]    0CA3: 8A 1E 5F 0F                           		mov bl,alarm_min
+[1248]    0CA7: FE CB                                 		dec bl
+[1249]    0CA9: 80 FB 00                              		cmp bl,00
+[1250]    0CAC: 7D 02                                 		jge al5
+[1251]    0CAE: B3 3B                                 		mov bl,59
+[1252]    0CB0: 88 1E 5F 0F                           al5:		mov alarm_min,bl
+[1253]    0CB4: E8 60 01                              		call alarm_display
+[1254]    0CB7: EB 9C                                 		jmp al1						
+[1255]    0CB9: 3C 02                                 al3:		cmp al,02h
+[1256]    0CBB: 75 98                                 		jne al1						;increment
+[1257]    0CBD: 8A 1E 5F 0F                           		mov bl,alarm_min
+[1258]    0CC1: FE C3                                 		inc bl
+[1259]    0CC3: 80 FB 3C                              		cmp bl,60
+[1260]    0CC6: 75 02                                 		jne al6
+[1261]    0CC8: B3 00                                 		mov bl,00
+[1262]    0CCA: 88 1E 5F 0F                           al6:		mov alarm_min,bl
+[1263]    0CCE: E8 46 01                              		call alarm_display
+[1264]    0CD1: EB 82                                 		jmp al1						
+[1265]    0CD3: C3                                    al2:		ret
+[1266]        :                                       
+[1267]        :                                       								
+[1268]        :                                       
+[1269]        :                                       		set_alarm_min endp
+[1270]        :                                       ;end of set_alarm_min
+[1271]        :                                       
+[1272]        :                                       
+[1273]        :                                       	; procedure to make the buzzer ring in the required sequence for an iPhone alarm(Notes: GGA#CCA#GCFCA#CF): One sequence takes approx. 3 secs
+[1274]    0CD4:                                       buzzer proc near
+[1275]    0CD4: A0 5D 0F                              		mov al,alarm_hour							
+[1276]    0CD7: 8A 26 54 0F                           		mov ah,hour					
+[1277]    0CDB: 3A C4                                 		cmp al,ah						;if current hour != alarm_hour, then ret
+[1278]    0CDD: 74 03 E9 30 01                        		jne esc1						;else, check min
+[1279]        :                                       		
+[1280]    0CE2: A0 5F 0F                              		mov al,alarm_min				; if current min is not equal to alarm_min, then ret
+[1281]    0CE5: 8A 26 53 0F                           		mov ah,min						; else, ring buzzer
+[1282]    0CE9: 3A C4                                 		cmp al,ah
+[1283]    0CEB: 74 03 E9 22 01                        		jne esc1
+[1284]        :                                       							
+[1285]        :                                       								
+[1286]        :                                       							
+[1287]    0CF0:                                       buzz:		
+[1288]    0CF0: E4 00                                 		in al,port1a				;check if alarm on 	
+[1289]    0CF2: 24 10                                 		and al,10h
+[1290]    0CF4: 3C 10                                 		cmp al,10h					
+[1291]    0CF6: 74 03 E9 17 01                        		jne esc1					; if not on, ret
+[1292]    0CFB: 8A 26 53 0F                           		mov ah,min					
+[1293]    0CFF: 3A 26 5F 0F                           		cmp ah,alarm_min
+[1294]    0D03: 74 03 E9 0A 01                        		jne esc1			        ; end if alarm_min not = min
+[1295]    0D08: B0 00                                 		mov al,00h						
+[1296]    0D0A: E6 10                                 		out port2a,al		
+[1297]        :                                       		
+[1298]        :                                       		
+[1299]    0D0C: 51                                    		push cx
+[1300]        :                                       		
+[1301]    0D0D: B9 0A 00                              		mov cx, 10
+[1302]    0D10:                                       	pause:								; pause for 20ms
+[1303]    0D10: E8 7A F8                              		call delay_20ms
+[1304]    0D13: E2 FB                                 		loop pause
+[1305]        :                                       		; pop cx
+[1306]        :                                       		
+[1307]        :                                       		
+[1308]    0D15: B0 04                                 	    mov al, 04h
+[1309]    0D17: E6 10                                 		out port2a, al
+[1310]        :                                       		; push cx
+[1311]    0D19: B9 0A 00                              		mov cx, 10
+[1312]    0D1C:                                       	G1:	
+[1313]    0D1C: E8 6E F8                              		call delay_20ms
+[1314]    0D1F: E2 FB                                 		loop G1
+[1315]        :                                       		; pop cx
+[1316]    0D21: B0 00                                 		mov al,00h						
+[1317]    0D23: E6 10                                 		out port2a,al
+[1318]    0D25: E8 65 F8                              		call delay_20ms
+[1319]    0D28: E8 62 F8                              		call delay_20ms
+[1320]    0D2B: E8 5F F8                              		call delay_20ms
+[1321]    0D2E: B0 04                                 		mov al, 04h					; ring the buzzer of note G for 200ms and pause
+[1322]    0D30: E6 10                                 		out port2a, al
+[1323]        :                                       		
+[1324]    0D32: B9 0A 00                              		mov cx, 10
+[1325]    0D35:                                       	G2:	
+[1326]    0D35: E8 55 F8                              		call delay_20ms
+[1327]    0D38: E2 FB                                 		loop G2
+[1328]        :                                       		
+[1329]    0D3A: B0 00                                 		mov al,00h						
+[1330]    0D3C: E6 10                                 		out port2a,al
+[1331]    0D3E: E8 4C F8                              		call delay_20ms
+[1332]    0D41: E8 49 F8                              		call delay_20ms
+[1333]    0D44: B0 02                                 		mov al, 2					; ring the buzzer of note G for 200ms and pause
+[1334]    0D46: E6 10                                 		out port2a, al
+[1335]        :                                       		
+[1336]    0D48: B9 0A 00                              		mov cx, 10
+[1337]    0D4B:                                       	A#1:	
+[1338]    0D4B: E8 3F F8                              		call delay_20ms
+[1339]    0D4E: E2 FB                                 		loop A#1
+[1340]        :                                       		
+[1341]    0D50: B0 00                                 		mov al,00h						
+[1342]    0D52: E6 10                                 		out port2a,al
+[1343]    0D54: E8 36 F8                              		call delay_20ms
+[1344]    0D57: B0 01                                 		mov al, 1					; ring the buzzer of note A# for 200ms and pause
+[1345]    0D59: E6 10                                 		out port2a, al
+[1346]        :                                       		
+[1347]    0D5B: B9 0A 00                              		mov cx, 10
+[1348]    0D5E:                                       	C1:	
+[1349]    0D5E: E8 2C F8                              		call delay_20ms
+[1350]    0D61: E2 FB                                 		loop C1
+[1351]        :                                       		
+[1352]    0D63: B0 00                                 		mov al,00h						
+[1353]    0D65: E6 10                                 		out port2a,al
+[1354]    0D67: E8 23 F8                              		call delay_20ms
+[1355]    0D6A: B0 01                                 		mov al, 1					; ring the buzzer of note C for 200ms and pause
+[1356]    0D6C: E6 10                                 		out port2a, al
+[1357]        :                                       		
+[1358]    0D6E: B9 0A 00                              		mov cx, 10
+[1359]        :                                       		
+[1360]    0D71:                                       	C2:	
+[1361]    0D71: E8 19 F8                              		call delay_20ms
+[1362]    0D74: E2 FB                                 		loop C2
+[1363]        :                                       		
+[1364]    0D76: B0 00                                 		mov al,00h						
+[1365]    0D78: E6 10                                 		out port2a,al
+[1366]    0D7A: E8 10 F8                              		call delay_20ms
+[1367]    0D7D: B0 02                                 		mov al, 2					; ring the buzzer of note C for 200ms and pause
+[1368]    0D7F: E6 10                                 		out port2a, al
+[1369]        :                                       		
+[1370]    0D81: B9 0A 00                              		mov cx,10
+[1371]        :                                       	
+[1372]    0D84:                                       	A#2:	
+[1373]    0D84: E8 06 F8                              		call delay_20ms
+[1374]    0D87: E2 FB                                 		loop A#2
+[1375]        :                                       		
+[1376]    0D89: B0 00                                 		mov al,00h						
+[1377]    0D8B: E6 10                                 		out port2a,al
+[1378]    0D8D: E8 FD F7                              		call delay_20ms
+[1379]    0D90: B0 04                                 		mov al, 4					; ring the buzzer of note A# for 200ms and pause
+[1380]    0D92: E6 10                                 		out port2a, al
+[1381]        :                                       	
+[1382]    0D94: B9 0A 00                              		mov cx, 10
+[1383]    0D97:                                       	G3:	
+[1384]    0D97: E8 F3 F7                              		call delay_20ms
+[1385]    0D9A: E2 FB                                 		loop G3
+[1386]        :                                       		
+[1387]    0D9C: B0 00                                 		mov al,00h						
+[1388]    0D9E: E6 10                                 		out port2a,al
+[1389]    0DA0: E8 EA F7                              		call delay_20ms
+[1390]    0DA3: B0 01                                 		mov al, 1					; ring the buzzer of note G for 200ms and pause
+[1391]    0DA5: E6 10                                 		out port2a, al
+[1392]        :                                       		
+[1393]    0DA7: B9 0A 00                              		mov cx, 10
+[1394]    0DAA:                                       	C3:	
+[1395]    0DAA: E8 E0 F7                              		call delay_20ms
+[1396]    0DAD: E2 FB                                 		loop C3
+[1397]        :                                       		
+[1398]    0DAF: B0 00                                 		mov al,00h						
+[1399]    0DB1: E6 10                                 		out port2a,al
+[1400]    0DB3: E8 D7 F7                              		call delay_20ms
+[1401]    0DB6: B0 08                                 		mov al, 8					; ring the buzzer of note C for 200ms and pause
+[1402]    0DB8: E6 10                                 		out port2a, al
+[1403]        :                                       		
+[1404]    0DBA: B9 0A 00                              		mov cx, 10
+[1405]    0DBD:                                       	F1:	
+[1406]    0DBD: E8 CD F7                              		call delay_20ms
+[1407]    0DC0: E2 FB                                 		loop F1
+[1408]        :                                       		
+[1409]    0DC2: B0 00                                 		mov al,00h						
+[1410]    0DC4: E6 10                                 		out port2a,al
+[1411]    0DC6: E8 C4 F7                              		call delay_20ms
+[1412]    0DC9: B0 01                                 		mov al, 1					; ring the buzzer of note F for 200ms and pause
+[1413]    0DCB: E6 10                                 		out port2a, al
+[1414]        :                                       		
+[1415]    0DCD: B9 0A 00                              		mov cx, 10
+[1416]    0DD0:                                       	C4:	
+[1417]    0DD0: E8 BA F7                              		call delay_20ms
+[1418]    0DD3: E2 FB                                 		loop C4
+[1419]        :                                       		
+[1420]    0DD5: B0 00                                 		mov al,00h						
+[1421]    0DD7: E6 10                                 		out port2a,al
+[1422]    0DD9: E8 B1 F7                              		call delay_20ms
+[1423]    0DDC: B0 02                                 		mov al, 2					; ring the buzzer of note C for 200ms and pause
+[1424]    0DDE: E6 10                                 		out port2a, al
+[1425]        :                                       		
+[1426]    0DE0: B9 0A 00                              		mov cx, 10
+[1427]    0DE3:                                       	A#3:	
+[1428]    0DE3: E8 A7 F7                              		call delay_20ms
+[1429]    0DE6: E2 FB                                 		loop A#3
+[1430]        :                                       		
+[1431]    0DE8: B0 00                                 		mov al,00h						
+[1432]    0DEA: E6 10                                 		out port2a,al
+[1433]    0DEC: E8 9E F7                              		call delay_20ms
+[1434]    0DEF: B0 01                                 		mov al, 1					; ring the buzzer of note A# for 200ms and pause
+[1435]    0DF1: E6 10                                 		out port2a, al
+[1436]        :                                       		
+[1437]    0DF3: B9 0A 00                              		mov cx, 10
+[1438]    0DF6:                                       	C5:	
+[1439]    0DF6: E8 94 F7                              		call delay_20ms
+[1440]    0DF9: E2 FB                                 		loop C5
+[1441]        :                                       		
+[1442]    0DFB: B0 00                                 		mov al,00h						
+[1443]    0DFD: E6 10                                 		out port2a,al
+[1444]    0DFF: E8 8B F7                              		call delay_20ms
+[1445]    0E02: B0 08                                 		mov al, 8					; ring the buzzer of note C for 200ms and pause. Ring the buzzer of note F for 200ms and check if alarm_min= min
+[1446]    0E04: E6 10                                 		out port2a, al
+[1447]        :                                       		
+[1448]    0E06: B9 0A 00                              		mov cx, 10
+[1449]    0E09:                                       	F2:	
+[1450]    0E09: E8 81 F7                              		call delay_20ms
+[1451]    0E0C: E2 FB                                 		loop F2
+[1452]        :                                       		
+[1453]    0E0E: 59                                    		pop cx
+[1454]        :                                       		
+[1455]    0E0F: E9 DE FE                              		jmp buzz						; if min == alarm_min, keep rining the buzzer
+[1456]        :                                       		
+[1457]    0E12: B0 00                                 esc1:		mov al,00h
+[1458]    0E14: E6 10                                 		out port2a,al				;Stop buzzer sound
+[1459]        :                                       	
+[1460]    0E16: C3                                    		ret
+[1461]        :                                       buzzer endp	
+[1462]        :                                       
+[1463]    0E17:                                       alarm_display proc near
+[1464]        :                                       	
+[1465]        :                                       	;input format
+[1466]    0E17: E4 00                                 	in al,port1a
+[1467]    0E19: 24 01                                 	and al,01h
+[1468]    0E1B: A2 5A 0F                              	mov format_check,al
+[1469]        :                                       	
+[1470]        :                                       	;clear screen
+[1471]    0E1E: B0 01                                 		mov al,01h
+[1472]    0E20: E6 12                                 		out port2b,al
+[1473]    0E22: B0 01                                 		mov al,01h
+[1474]    0E24: E6 14                                 		out port2c,al
+[1475]    0E26: B0 00                                 		mov al,00h
+[1476]    0E28: E6 14                                 		out port2c,al
+[1477]    0E2A: E8 60 F7                              		call delay_20ms
+[1478]        :                                       		
+[1479]        :                                       	; display hour
+[1480]        :                                       	;check format
+[1481]    0E2D: A0 5A 0F                              		mov al,format_check
+[1482]    0E30: 3C 01                                 		cmp al,1
+[1483]    0E32: 75 3C                                 		jne ahr12
+[1484]        :                                       		
+[1485]        :                                       		;display alarm_hour_24
+[1486]    0E34: A0 5D 0F                              		mov al,alarm_hour
+[1487]    0E37: 8A D8                                 		mov       bl,al
+[1488]    0E39: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[1489]    0E3B: 04 01                                 x8:		add       al,01
+[1490]    0E3D: 27                                    	    daa
+[1491]    0E3E: FE CB                                 	    dec       bl
+[1492]    0E40: 75 F9                                 	    jnz       x8
+[1493]    0E42: A2 58 0F                              		mov digit,al
+[1494]        :                                       		
+[1495]    0E45: 24 F0                                 		and al,0f0h
+[1496]    0E47: B1 04                                 		mov cl,4
+[1497]    0E49: D2 C0                                 		rol al,cl
+[1498]    0E4B: 04 30                                 		add al,30h
+[1499]        :                                       		
+[1500]    0E4D: E6 12                                 		out port2b,al
+[1501]    0E4F: B0 11                                 		mov al,11h
+[1502]    0E51: E6 14                                 		out port2c,al
+[1503]    0E53: B0 10                                 		mov al,10h
+[1504]    0E55: E6 14                                 		out port2c,al
+[1505]    0E57: E8 33 F7                              		call delay_20ms
+[1506]        :                                       		
+[1507]    0E5A: A0 58 0F                              		mov al,digit
+[1508]    0E5D: 24 0F                                 		and al,0fh
+[1509]    0E5F: 04 30                                 		add al,30h
+[1510]        :                                       		
+[1511]    0E61: E6 12                                 		out port2b,al
+[1512]    0E63: B0 11                                 		mov al,11h
+[1513]    0E65: E6 14                                 		out port2c,al
+[1514]    0E67: B0 10                                 		mov al,10h
+[1515]    0E69: E6 14                                 		out port2c,al
+[1516]    0E6B: E8 1F F7                              		call delay_20ms
+[1517]        :                                       		;display alarm_hour_24 completed
+[1518]        :                                       		
+[1519]    0E6E: EB 3A                                 		jmp skip3
+[1520]        :                                       		
+[1521]        :                                       		;display alarm_hour_12
+[1522]    0E70:                                       ahr12:	
+[1523]    0E70: A0 5E 0F                              		mov al,alarm_hour_12
+[1524]    0E73: 8A D8                                 		mov       bl,al
+[1525]    0E75: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[1526]    0E77: 04 01                                 x9:		add       al,01
+[1527]    0E79: 27                                    	    daa
+[1528]    0E7A: FE CB                                 	    dec       bl
+[1529]    0E7C: 75 F9                                 	    jnz       x9
+[1530]    0E7E: A2 58 0F                              		mov digit,al
+[1531]        :                                       		
+[1532]    0E81: 24 F0                                 		and al,0f0h
+[1533]    0E83: B1 04                                 		mov cl,4
+[1534]    0E85: D2 C0                                 		rol al,cl
+[1535]    0E87: 04 30                                 		add al,30h
+[1536]        :                                       		
+[1537]    0E89: E6 12                                 		out port2b,al
+[1538]    0E8B: B0 11                                 		mov al,11h
+[1539]    0E8D: E6 14                                 		out port2c,al
+[1540]    0E8F: B0 10                                 		mov al,10h
+[1541]    0E91: E6 14                                 		out port2c,al
+[1542]    0E93: E8 F7 F6                              		call delay_20ms
+[1543]        :                                       		
+[1544]    0E96: A0 58 0F                              		mov al,digit
+[1545]    0E99: 24 0F                                 		and al,0fh
+[1546]    0E9B: 04 30                                 		add al,30h
+[1547]        :                                       		
+[1548]    0E9D: E6 12                                 		out port2b,al
+[1549]    0E9F: B0 11                                 		mov al,11h
+[1550]    0EA1: E6 14                                 		out port2c,al
+[1551]    0EA3: B0 10                                 		mov al,10h
+[1552]    0EA5: E6 14                                 		out port2c,al
+[1553]    0EA7: E8 E3 F6                              		call delay_20ms
+[1554]        :                                       		;display alarm_hour_12 completed
+[1555]        :                                       		
+[1556]        :                                       		;displaying ':'
+[1557]    0EAA: B0 3A                                 skip3:	mov al,3ah
+[1558]    0EAC: E6 12                                 		out port2b,al
+[1559]    0EAE: B0 11                                 		mov al,11h
+[1560]    0EB0: E6 14                                 		out port2c,al
+[1561]    0EB2: B0 10                                 		mov al,10h
+[1562]    0EB4: E6 14                                 		out port2c,al
+[1563]    0EB6: E8 D4 F6                              		call delay_20ms
+[1564]        :                                       		
+[1565]        :                                       		;display alarm_min
+[1566]        :                                       		
+[1567]    0EB9: A0 5F 0F                              		mov al,alarm_min
+[1568]    0EBC: 8A D8                                 		mov       bl,al
+[1569]    0EBE: B0 00                                 	    mov       al,0          ; converting hex to dec value
+[1570]    0EC0: 04 01                                 x10:	add       al,01
+[1571]    0EC2: 27                                    	    daa
+[1572]    0EC3: FE CB                                 	    dec       bl
+[1573]    0EC5: 75 F9                                 	    jnz       x10
+[1574]    0EC7: A2 58 0F                              		mov digit,al
+[1575]        :                                       		
+[1576]    0ECA: 24 F0                                 		and al,0f0h
+[1577]    0ECC: B1 04                                 		mov cl,4
+[1578]    0ECE: D2 C0                                 		rol al,cl
+[1579]    0ED0: 04 30                                 		add al,30h
+[1580]        :                                       		
+[1581]    0ED2: E6 12                                 		out port2b,al
+[1582]    0ED4: B0 11                                 		mov al,11h
+[1583]    0ED6: E6 14                                 		out port2c,al
+[1584]    0ED8: B0 10                                 		mov al,10h
+[1585]    0EDA: E6 14                                 		out port2c,al
+[1586]    0EDC: E8 AE F6                              		call delay_20ms
+[1587]        :                                       		
+[1588]    0EDF: A0 58 0F                              		mov al,digit
+[1589]    0EE2: 24 0F                                 		and al,0fh
+[1590]    0EE4: 04 30                                 		add al,30h
+[1591]        :                                       		
+[1592]    0EE6: E6 12                                 		out port2b,al
+[1593]    0EE8: B0 11                                 		mov al,11h
+[1594]    0EEA: E6 14                                 		out port2c,al
+[1595]    0EEC: B0 10                                 		mov al,10h
+[1596]    0EEE: E6 14                                 		out port2c,al
+[1597]    0EF0: E8 9A F6                              		call delay_20ms
+[1598]        :                                       		
+[1599]        :                                       		;display alarm_min end
+[1600]        :                                       		
+[1601]        :                                       		;check format
+[1602]    0EF3: A0 5A 0F                              		mov al,format_check
+[1603]    0EF6: 3C 01                                 		cmp al,1
+[1604]    0EF8: 74 51                                 		je skip4
+[1605]        :                                       		
+[1606]        :                                       		
+[1607]    0EFA: B0 20                                 		mov al,20h
+[1608]    0EFC: E6 12                                 		out port2b, al
+[1609]    0EFE: B0 11                                 		mov al,11h
+[1610]    0F00: E6 14                                 		out port2c,al
+[1611]    0F02: B0 10                                 		mov al,10h
+[1612]    0F04: E6 14                                 		out port2c,al
+[1613]        :                                       		;check if am/pm
+[1614]    0F06: A0 60 0F                              		mov al,alarm_phase
+[1615]    0F09: 3C 01                                 		cmp al,1
+[1616]    0F0B: 74 20                                 		je apm1
+[1617]        :                                       		
+[1618]        :                                       		;display 'am'
+[1619]    0F0D: B0 41                                 		mov al,41h
+[1620]    0F0F: E6 12                                 		out port2b, al
+[1621]    0F11: B0 11                                 		mov al,11h
+[1622]    0F13: E6 14                                 		out port2c,al
+[1623]    0F15: B0 10                                 		mov al,10h
+[1624]    0F17: E6 14                                 		out port2c,al
+[1625]    0F19: E8 71 F6                              		call delay_20ms
+[1626]        :                                       		
+[1627]    0F1C: B0 4D                                 		mov al,4dh
+[1628]    0F1E: E6 12                                 		out port2b,al
+[1629]    0F20: B0 11                                 		mov al,11h
+[1630]    0F22: E6 14                                 		out port2c,al
+[1631]    0F24: B0 10                                 		mov al,10h
+[1632]    0F26: E6 14                                 		out port2c,al
+[1633]    0F28: E8 62 F6                              		call delay_20ms
+[1634]        :                                       		
+[1635]    0F2B: EB 1E                                 		jmp skip4
+[1636]        :                                       		;display 'pm'
+[1637]    0F2D: B0 50                                 apm1:	mov al,50h
+[1638]    0F2F: E6 12                                 		out port2b, al
+[1639]    0F31: B0 11                                 		mov al,11h
+[1640]    0F33: E6 14                                 		out port2c,al
+[1641]    0F35: B0 10                                 		mov al,10h
+[1642]    0F37: E6 14                                 		out port2c,al
+[1643]    0F39: E8 51 F6                              		call delay_20ms
+[1644]        :                                       		
+[1645]    0F3C: B0 4D                                 		mov al,4Dh
+[1646]    0F3E: E6 12                                 		out port2b, al
+[1647]    0F40: B0 11                                 		mov al,11h
+[1648]    0F42: E6 14                                 		out port2c,al
+[1649]    0F44: B0 10                                 		mov al,10h
+[1650]    0F46: E6 14                                 		out port2c,al
+[1651]    0F48: E8 42 F6                              		call delay_20ms
+[1652]        :                                       
+[1653]    0F4B: C3                                    skip4:	ret
+[1654]        :                                       alarm_display endp
+[1655]        :                                       
+[1656]        :                                       
+[1657]        :                                       
+[1658]    0F4C: 00                                    stat db 00h
+[1659]        :                                       ;count values
+[1660]    0F4D: 3C                                    	count_sec db 60
+[1661]    0F4E: 3C                                    	count_min db 60
+[1662]    0F4F: 18                                    	count_hour db 24
+[1663]    0F50: 1E                                    	count_day db 30
+[1664]    0F51: 0C                                    	count_month db 12
+[1665]    0F52: 00                                    	second db 0
+[1666]    0F53: 00                                    	min db 0
+[1667]    0F54: 00                                    	hour db 0
+[1668]    0F55: 01                                    	day db 01
+[1669]    0F56: 01                                    	month db 01
+[1670]    0F57: 0D                                    	year db 13
+[1671]    0F58: 00                                    	digit db 0
+[1672]    0F59: 00                                    	year_mod db 0
+[1673]    0F5A: 00                                    	format_check db 0
+[1674]    0F5B: 00                                    	hour_12 db 0
+[1675]    0F5C: 00                                    	phase db 0
+[1676]        :                                       	
+[1677]        :                                       ;alarm values
+[1678]    0F5D: 00                                    	alarm_hour db 0
+[1679]    0F5E: 00                                    	alarm_hour_12 db 0
+[1680]    0F5F: 00                                    	alarm_min db 0
+[1681]    0F60: 00                                    	alarm_phase db 0
+[1682]        :                                       	
+[1683]        :                                       		
+[1684]        :                                       
+[1685]        :                                       
+[1686]    0F61: F4                                    HLT           ; halt!
+[1687]        :                                       
+[1688]        :                                       
+[1689]        :                                       
+[1690]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
